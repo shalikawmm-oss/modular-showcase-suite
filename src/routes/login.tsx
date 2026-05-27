@@ -6,6 +6,7 @@ import {
 } from "lucide-react";
 import { useAuth } from "@/lib/auth";
 import { demoUsers } from "@/lib/mockData";
+import logoUrl from "@/assets/globaledu-logo.png";
 
 export const Route = createFileRoute("/login")({
   head: () => ({ meta: [{ title: "Sign in — GlobalEdu" }] }),
@@ -71,8 +72,8 @@ function LoginPage() {
 
         <div className="relative">
           <div className="flex items-center gap-3">
-            <div className="h-11 w-11 rounded-xl bg-white/15 backdrop-blur-md ring-1 ring-white/30 flex items-center justify-center shadow-2xl">
-              <GraduationCap className="h-6 w-6" />
+            <div className="h-12 w-12 rounded-2xl bg-white p-1.5 ring-1 ring-white/40 shadow-2xl flex items-center justify-center">
+              <img src={logoUrl} alt="GlobalEdu logo" width={40} height={40} className="h-full w-full object-contain" />
             </div>
             <div>
               <div className="font-bold text-lg tracking-tight">GlobalEdu</div>
@@ -171,7 +172,7 @@ function LoginPage() {
 
         <div className="relative w-full max-w-md">
           <div className="lg:hidden flex items-center gap-2 mb-8">
-            <div className="h-10 w-10 rounded-xl bg-gradient-brand text-white flex items-center justify-center font-bold shadow-elegant">G</div>
+            <img src={logoUrl} alt="GlobalEdu logo" width={40} height={40} className="h-10 w-10" />
             <div className="font-bold">GlobalEdu</div>
           </div>
 

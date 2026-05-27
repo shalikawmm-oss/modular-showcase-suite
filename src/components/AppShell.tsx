@@ -4,6 +4,7 @@ import * as Icons from "lucide-react";
 import { useAuth } from "@/lib/auth";
 import { menusByRole, roleLabel } from "@/lib/menus";
 import { cn } from "@/lib/utils";
+import logoUrl from "@/assets/globaledu-logo.png";
 
 function Icon({ name, className }: { name: string; className?: string }) {
   const Cmp = (Icons as any)[name] ?? Icons.Circle;
@@ -39,9 +40,13 @@ export function AppShell() {
         )}
       >
         <div className="h-16 flex items-center gap-3 px-4 border-b border-sidebar-border">
-          <div className="h-9 w-9 rounded-lg bg-gradient-brand flex items-center justify-center font-bold text-white shrink-0">
-            G
-          </div>
+          <img
+            src={logoUrl}
+            alt="GlobalEdu logo"
+            width={36}
+            height={36}
+            className="h-9 w-9 shrink-0 drop-shadow"
+          />
           {open && (
             <div className="leading-tight">
               <div className="font-semibold text-sm">GlobalEdu</div>
