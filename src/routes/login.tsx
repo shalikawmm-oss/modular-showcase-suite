@@ -172,7 +172,7 @@ function LoginPage() {
 
         <div className="relative w-full max-w-md">
           <div className="lg:hidden flex items-center gap-2 mb-8">
-            <div className="h-10 w-10 rounded-xl bg-gradient-brand text-white flex items-center justify-center font-bold shadow-elegant">G</div>
+            <img src={logoUrl} alt="GlobalEdu logo" width={40} height={40} className="h-10 w-10" />
             <div className="font-bold">GlobalEdu</div>
           </div>
 
