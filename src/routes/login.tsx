@@ -6,6 +6,7 @@ import {
 } from "lucide-react";
 import { useAuth } from "@/lib/auth";
 import { demoUsers } from "@/lib/mockData";
+import logoUrl from "@/assets/globaledu-logo.png";
 
 export const Route = createFileRoute("/login")({
   head: () => ({ meta: [{ title: "Sign in — GlobalEdu" }] }),
