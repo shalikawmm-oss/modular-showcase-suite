@@ -306,6 +306,31 @@ function StudentsPage() {
           />
         </Field>
       </FormDialog>
+
+      <ImportDialog<Student>
+        open={importer.open}
+        onOpenChange={importer.setOpen}
+        title="Import students from CSV"
+        entityLabel="students"
+        fields={STUDENT_IMPORT_FIELDS}
+        templateName="students-template.csv"
+        transform={(row) => {
+          const attendance = Number(row.attendance) || 0;
+          const gpa = Number(row.gpa) || 0;
+          return {
+            id: nextId("S-", "students"),
+            name: row.name,
+            grade: row.grade,
+            batch: row.batch || "Unassigned",
+            attendance,
+            gpa,
+            status: row.status || "Active",
+            parent: row.parent || "—",
+            risk: attendance < 70 || gpa < 2.5 ? "high" : attendance < 85 ? "medium" : "low",
+          };
+        }}
+        onCommit={(items) => items.forEach((s) => addItem("students", s))}
+      />
     </div>
   );
 }

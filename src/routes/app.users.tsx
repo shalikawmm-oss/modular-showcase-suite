@@ -14,7 +14,8 @@ import {
   useDisclosure,
 } from "@/components/ui-kit";
 import { useCollection, addItem, type PlatformUser } from "@/lib/store";
-import { ShieldCheck, Plus } from "lucide-react";
+import { ImportDialog, type ImportField } from "@/components/ImportDialog";
+import { ShieldCheck, Plus, Upload } from "lucide-react";
 
 export const Route = createFileRoute("/app/users")({
   head: () => ({ meta: [{ title: "Users & Roles — GlobalEdu" }] }),
@@ -32,9 +33,17 @@ const ROLES = [
   "Finance Officer",
 ];
 
+const USER_IMPORT_FIELDS: ImportField[] = [
+  { key: "name", label: "Name", required: true, sample: "Saman Silva" },
+  { key: "email", label: "Email", required: true, sample: "saman@gch.lk" },
+  { key: "role", label: "Role", sample: "Teacher" },
+  { key: "mfa", label: "MFA (true/false)", sample: "true" },
+];
+
 function UsersPage() {
   const users = useCollection("platformUsers");
   const add = useDisclosure();
+  const importer = useDisclosure();
 
   const [form, setForm] = useState({
     name: "",
@@ -67,10 +76,16 @@ function UsersPage() {
         title="Identity & Access Management"
         subtitle="RBAC + ABAC · SSO · Microsoft Entra ID · MFA across the platform."
         actions={
-          <Button onClick={add.onOpen}>
-            <Plus className="h-4 w-4" />
-            Invite User
-          </Button>
+          <>
+            <Button variant="outline" onClick={importer.onOpen}>
+              <Upload className="h-4 w-4" />
+              <span className="hidden sm:inline">Import CSV</span>
+            </Button>
+            <Button onClick={add.onOpen}>
+              <Plus className="h-4 w-4" />
+              Invite User
+            </Button>
+          </>
         }
       />
       <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-3">
@@ -155,6 +170,23 @@ function UsersPage() {
           />
         </Field>
       </FormDialog>
+
+      <ImportDialog<PlatformUser>
+        open={importer.open}
+        onOpenChange={importer.setOpen}
+        title="Import users from CSV"
+        entityLabel="users"
+        fields={USER_IMPORT_FIELDS}
+        templateName="users-template.csv"
+        transform={(row) => ({
+          name: row.name,
+          email: row.email,
+          role: row.role || "Student",
+          lastLogin: "never",
+          mfa: /^(1|true|yes)$/i.test(row.mfa ?? ""),
+        })}
+        onCommit={(items) => items.forEach((u) => addItem("platformUsers", u))}
+      />
     </div>
   );
 }

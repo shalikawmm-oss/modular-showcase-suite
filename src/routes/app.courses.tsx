@@ -12,7 +12,8 @@ import {
   useDisclosure,
 } from "@/components/ui-kit";
 import { useCollection, addItem, nextId, type Course } from "@/lib/store";
-import { Star, Users, Clock, Plus, Search, BookOpen } from "lucide-react";
+import { ImportDialog, type ImportField } from "@/components/ImportDialog";
+import { Star, Users, Clock, Plus, Search, BookOpen, Upload } from "lucide-react";
 
 export const Route = createFileRoute("/app/courses")({
   head: () => ({ meta: [{ title: "Courses — GlobalEdu" }] }),
@@ -21,9 +22,20 @@ export const Route = createFileRoute("/app/courses")({
 
 const CATEGORIES = ["Science", "Mathematics", "Languages", "Technology", "Arts", "Commerce"];
 
+const COURSE_IMPORT_FIELDS: ImportField[] = [
+  { key: "title", label: "Title", required: true, sample: "Advanced Physics" },
+  { key: "code", label: "Code", required: true, sample: "PHY-12" },
+  { key: "category", label: "Category", sample: "Science" },
+  { key: "teacher", label: "Teacher", sample: "Dr. Saman Silva" },
+  { key: "schedule", label: "Schedule", sample: "Mon/Wed 4-6 PM" },
+  { key: "credits", label: "Credits", sample: "4" },
+  { key: "price", label: "Price", sample: "120" },
+];
+
 function CoursesPage() {
   const courses = useCollection("courses");
   const add = useDisclosure();
+  const importer = useDisclosure();
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState("");
 
@@ -88,10 +100,16 @@ function CoursesPage() {
         title="Academic Management"
         subtitle="Courses, subjects, timetables, batches and credits."
         actions={
-          <Button onClick={add.onOpen}>
-            <Plus className="h-4 w-4" />
-            New Course
-          </Button>
+          <>
+            <Button variant="outline" onClick={importer.onOpen}>
+              <Upload className="h-4 w-4" />
+              <span className="hidden sm:inline">Import CSV</span>
+            </Button>
+            <Button onClick={add.onOpen}>
+              <Plus className="h-4 w-4" />
+              New Course
+            </Button>
+          </>
         }
       />
 
@@ -240,6 +258,28 @@ function CoursesPage() {
           />
         </Field>
       </FormDialog>
+
+      <ImportDialog<Course>
+        open={importer.open}
+        onOpenChange={importer.setOpen}
+        title="Import courses from CSV"
+        entityLabel="courses"
+        fields={COURSE_IMPORT_FIELDS}
+        templateName="courses-template.csv"
+        transform={(row) => ({
+          id: nextId("C-", "courses"),
+          title: row.title,
+          code: (row.code || "").toUpperCase(),
+          teacher: row.teacher || "Unassigned",
+          students: 0,
+          credits: Number(row.credits) || 0,
+          schedule: row.schedule || "TBD",
+          rating: 0,
+          price: Number(row.price) || 0,
+          category: row.category || "General",
+        })}
+        onCommit={(items) => items.forEach((c) => addItem("courses", c))}
+      />
     </div>
   );
 }

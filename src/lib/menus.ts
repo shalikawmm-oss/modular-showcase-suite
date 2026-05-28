@@ -27,6 +27,7 @@ const ALL: Record<string, MenuItem> = {
   reports: { label: "Reports & BI", to: "/app/reports", icon: "BarChart3", group: "Intelligence" },
   tenants: { label: "Tenants", to: "/app/tenants", icon: "Building2", group: "Platform" },
   users: { label: "Users & Roles", to: "/app/users", icon: "ShieldCheck", group: "Platform" },
+  migration: { label: "Migration & Imports", to: "/app/migration", icon: "DatabaseZap", group: "Platform" },
   compliance: { label: "Compliance & Audit", to: "/app/compliance", icon: "FileLock2", group: "Platform" },
   profile: { label: "My Profile", to: "/app/profile", icon: "User", group: "Account" },
 };
@@ -46,7 +47,7 @@ export const menusByRole: Record<Role, MenuItem[]> = {
   admin: [
     ALL.dashboard, ALL.students, ALL.courses, ALL.attendance, ALL.lms, ALL.finance,
     ALL.marketing, ALL.marketplace, ALL.ai, ALL.reports, ALL.tenants, ALL.users,
-    ALL.compliance, ALL.messages, ALL.profile,
+    ALL.migration, ALL.compliance, ALL.messages, ALL.profile,
   ],
 };
 

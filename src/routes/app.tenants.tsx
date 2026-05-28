@@ -14,7 +14,8 @@ import {
   useDisclosure,
 } from "@/components/ui-kit";
 import { useCollection, addItem, nextId, type Tenant } from "@/lib/store";
-import { Plus } from "lucide-react";
+import { ImportDialog, type ImportField } from "@/components/ImportDialog";
+import { Plus, Upload } from "lucide-react";
 
 export const Route = createFileRoute("/app/tenants")({
   head: () => ({ meta: [{ title: "Tenants — GlobalEdu" }] }),
@@ -24,9 +25,18 @@ export const Route = createFileRoute("/app/tenants")({
 const PLANS = ["Starter", "Growth", "Enterprise"];
 const COUNTRIES = ["Sri Lanka", "India", "UAE", "USA", "UK", "France", "Australia", "Singapore"];
 
+const TENANT_IMPORT_FIELDS: ImportField[] = [
+  { key: "name", label: "Tenant name", required: true, sample: "Horizon Academy" },
+  { key: "country", label: "Country", sample: "Sri Lanka" },
+  { key: "students", label: "Students", sample: "1200" },
+  { key: "plan", label: "Plan", sample: "Growth" },
+  { key: "mrr", label: "MRR", sample: "1500" },
+];
+
 function TenantsPage() {
   const tenants = useCollection("tenants");
   const add = useDisclosure();
+  const importer = useDisclosure();
 
   const [form, setForm] = useState({
     name: "",
@@ -68,10 +78,16 @@ function TenantsPage() {
         title="Multi-Tenant Management"
         subtitle="Institutions, schools, tutors and learning providers using the platform."
         actions={
-          <Button onClick={add.onOpen}>
-            <Plus className="h-4 w-4" />
-            Onboard Tenant
-          </Button>
+          <>
+            <Button variant="outline" onClick={importer.onOpen}>
+              <Upload className="h-4 w-4" />
+              <span className="hidden sm:inline">Import CSV</span>
+            </Button>
+            <Button onClick={add.onOpen}>
+              <Plus className="h-4 w-4" />
+              Onboard Tenant
+            </Button>
+          </>
         }
       />
       <Section>
@@ -162,6 +178,25 @@ function TenantsPage() {
           />
         </Field>
       </FormDialog>
+
+      <ImportDialog<Tenant>
+        open={importer.open}
+        onOpenChange={importer.setOpen}
+        title="Import tenants from CSV"
+        entityLabel="tenants"
+        fields={TENANT_IMPORT_FIELDS}
+        templateName="tenants-template.csv"
+        transform={(row) => ({
+          id: nextId("T-", "tenants"),
+          name: row.name,
+          country: row.country || "—",
+          students: Number(row.students) || 0,
+          plan: row.plan || "Starter",
+          status: "Trial",
+          mrr: Number(row.mrr) || 0,
+        })}
+        onCommit={(items) => items.forEach((t) => addItem("tenants", t))}
+      />
     </div>
   );
 }

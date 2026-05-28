@@ -19,6 +19,7 @@ import { Route as AppTeacherClassesRouteImport } from './routes/app.teacher-clas
 import { Route as AppStudentsRouteImport } from './routes/app.students'
 import { Route as AppReportsRouteImport } from './routes/app.reports'
 import { Route as AppProfileRouteImport } from './routes/app.profile'
+import { Route as AppMigrationRouteImport } from './routes/app.migration'
 import { Route as AppMessagesRouteImport } from './routes/app.messages'
 import { Route as AppMarketplaceRouteImport } from './routes/app.marketplace'
 import { Route as AppMarketingRouteImport } from './routes/app.marketing'
@@ -81,6 +82,11 @@ const AppReportsRoute = AppReportsRouteImport.update({
 const AppProfileRoute = AppProfileRouteImport.update({
   id: '/profile',
   path: '/profile',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppMigrationRoute = AppMigrationRouteImport.update({
+  id: '/migration',
+  path: '/migration',
   getParentRoute: () => AppRoute,
 } as any)
 const AppMessagesRoute = AppMessagesRouteImport.update({
@@ -166,6 +172,7 @@ export interface FileRoutesByFullPath {
   '/app/marketing': typeof AppMarketingRoute
   '/app/marketplace': typeof AppMarketplaceRoute
   '/app/messages': typeof AppMessagesRoute
+  '/app/migration': typeof AppMigrationRoute
   '/app/profile': typeof AppProfileRoute
   '/app/reports': typeof AppReportsRoute
   '/app/students': typeof AppStudentsRoute
@@ -190,6 +197,7 @@ export interface FileRoutesByTo {
   '/app/marketing': typeof AppMarketingRoute
   '/app/marketplace': typeof AppMarketplaceRoute
   '/app/messages': typeof AppMessagesRoute
+  '/app/migration': typeof AppMigrationRoute
   '/app/profile': typeof AppProfileRoute
   '/app/reports': typeof AppReportsRoute
   '/app/students': typeof AppStudentsRoute
@@ -216,6 +224,7 @@ export interface FileRoutesById {
   '/app/marketing': typeof AppMarketingRoute
   '/app/marketplace': typeof AppMarketplaceRoute
   '/app/messages': typeof AppMessagesRoute
+  '/app/migration': typeof AppMigrationRoute
   '/app/profile': typeof AppProfileRoute
   '/app/reports': typeof AppReportsRoute
   '/app/students': typeof AppStudentsRoute
@@ -243,6 +252,7 @@ export interface FileRouteTypes {
     | '/app/marketing'
     | '/app/marketplace'
     | '/app/messages'
+    | '/app/migration'
     | '/app/profile'
     | '/app/reports'
     | '/app/students'
@@ -267,6 +277,7 @@ export interface FileRouteTypes {
     | '/app/marketing'
     | '/app/marketplace'
     | '/app/messages'
+    | '/app/migration'
     | '/app/profile'
     | '/app/reports'
     | '/app/students'
@@ -292,6 +303,7 @@ export interface FileRouteTypes {
     | '/app/marketing'
     | '/app/marketplace'
     | '/app/messages'
+    | '/app/migration'
     | '/app/profile'
     | '/app/reports'
     | '/app/students'
@@ -377,6 +389,13 @@ declare module '@tanstack/react-router' {
       path: '/profile'
       fullPath: '/app/profile'
       preLoaderRoute: typeof AppProfileRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/migration': {
+      id: '/app/migration'
+      path: '/migration'
+      fullPath: '/app/migration'
+      preLoaderRoute: typeof AppMigrationRouteImport
       parentRoute: typeof AppRoute
     }
     '/app/messages': {
@@ -487,6 +506,7 @@ interface AppRouteChildren {
   AppMarketingRoute: typeof AppMarketingRoute
   AppMarketplaceRoute: typeof AppMarketplaceRoute
   AppMessagesRoute: typeof AppMessagesRoute
+  AppMigrationRoute: typeof AppMigrationRoute
   AppProfileRoute: typeof AppProfileRoute
   AppReportsRoute: typeof AppReportsRoute
   AppStudentsRoute: typeof AppStudentsRoute
@@ -510,6 +530,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppMarketingRoute: AppMarketingRoute,
   AppMarketplaceRoute: AppMarketplaceRoute,
   AppMessagesRoute: AppMessagesRoute,
+  AppMigrationRoute: AppMigrationRoute,
   AppProfileRoute: AppProfileRoute,
   AppReportsRoute: AppReportsRoute,
   AppStudentsRoute: AppStudentsRoute,
